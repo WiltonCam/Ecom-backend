@@ -11,6 +11,7 @@ const {
 
 merchs.get("/", async (req, res) => {
     const allMerch = await getAllMerch();
+    console.log(allMerch)
     if (allMerch.error) {
         return res.status(500).json({ error: "server error!!!" });
       } else {
