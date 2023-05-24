@@ -1,9 +1,9 @@
-const db = require("../Module/db/dbConfig.js");
+const db = require("../Module/db/dbConfig");
 
 const getAllMerch = async () => {
     try {
         const allMerch = await db.any("SELECT * FROM merchs");
-        return allMerch;
+        return {allMerch};
     } catch(error) {
         return {error: error}
     }
@@ -11,8 +11,8 @@ const getAllMerch = async () => {
 
 const getOneMerch = async (id) => {
     try{
-        const merch = await db.one(`SELECT * FROM merchs WHERE id=${id}`);
-        return merch;
+        const merch = await db.one("SELECT * FROM merchs WHERE id=1",id);
+        return {merch};
 
     }catch (error) {
         return {error: error};
@@ -30,7 +30,7 @@ const createMerch = async (merch) => {
             RETURNING *;`,
             [merch.name, merch.cost, merch.category, merch.image]
         );
-        return newMerch;
+        return {newMerch};
     } catch (error) {
         return { error: error};
     }
@@ -54,7 +54,7 @@ const updateMerch = async (id, Merch) => {
         "DELETE FROM merchs WHERE id=$1 RETURNING *",
         id
       );
-      return deletedMerch;
+      return {deletedMerch};
     } catch (e) {
       return e;
     }

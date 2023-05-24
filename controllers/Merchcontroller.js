@@ -1,26 +1,30 @@
 const express = require("express");
-const Merchs = express.Router();
+const merchs = express.Router();
 const {
     getAllMerch,
     getOneMerch,
     createMerch,
-    updateMerch,
-     deleteMerch
-} = require("../queries/Merch.js");
+    deleteMerch,
+    updateMerch
+} = require("../queries/Merch");
 
 
-Merchs.get("/", async (req, res) => {
+merchs.get("/", async (req, res) => {
     const allMerch = await getAllMerch();
-    res.status(200).json(allMerch);
-});
+    if (allMerch.error) {
+        return res.status(500).json({ error: "server error!!!" });
+      } else {
+        return res.status(200).json(allMerch);
+      }
+    }
+)
 
-
-Merchs.get("/:id", async (req, res) => {
+merchs.get("/:id", async (req, res) => {
     const { id } = req.params;
-    const Merch = await getOneMerch(id);
-    if(!Merch.error) {
-        res.status(200).json(Merch);
-    }else if (Merch.error.code === 0) {
+    const {merch} = await getOneMerch(id);
+    if(merch.error) {
+        res.status(200).json(merch);
+    }else if (merch.error.code === 0) {
         res.status(404).json("Item not found")
     }else {
         res.status(500).json({error: "server error"})
@@ -28,7 +32,7 @@ Merchs.get("/:id", async (req, res) => {
 });
        
 
-Merchs.post("/", async (req, res) => {
+merchs.post("/", async (req, res) => {
     const {name, cost, category, image} = req.body;
     const newMerch = await createMerch({
         name, 
@@ -43,10 +47,10 @@ Merchs.post("/", async (req, res) => {
     }
 })  
 
-Merchs.put("/:id", async (req, res) => {
+merchs.put("/:id", async (req, res) => {
     const { id } = req.params;
-    const Merch = req.body;
-    const updatedMerch = await updateMerch(id, Merch);
+    const merch = req.body;
+    const updatedMerch = await updateMerch(id, merch);
     if (!updatedMerch.error) {
         res.status(201).json(updatedMerch);
     }else {
@@ -54,7 +58,7 @@ Merchs.put("/:id", async (req, res) => {
     }
   });
 
-  Merchs.delete("/:id", async (req, res) => {
+  merchs.delete("/:id", async (req, res) => {
     const { id } = req.params;
     const deletedMerch = await deleteMerch(id);
     console.log(deletedMerch);
@@ -67,5 +71,5 @@ Merchs.put("/:id", async (req, res) => {
 
 
 
-module.exports = Merchs;
+module.exports = merchs;
 
