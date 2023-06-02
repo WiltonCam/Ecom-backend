@@ -37,7 +37,7 @@ const createMerch = async ({
         );
         return newMerch;
     } catch (error) {
-        return { error: error};
+        return { error : error};
     }
 };
 
