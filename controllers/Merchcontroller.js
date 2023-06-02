@@ -22,7 +22,7 @@ merchs.get("/", async (req, res) => {
 
 merchs.get("/:id", async (req, res) => {
     const { id } = req.params;
-    const {merch} = await getOneMerch(id);
+    const merch = await getOneMerch(id);
     if(merch.error) {
         res.status(200).json(merch);
     }else if (merch.error.code === 0) {

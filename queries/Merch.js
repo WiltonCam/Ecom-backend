@@ -60,8 +60,8 @@ const updateMerch = async (id, Merch) => {
         id
       );
       return deletedMerch;
-    } catch (e) {
-      return e;
+    } catch (error) {
+      return {error};
     }
   };
 
